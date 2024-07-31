@@ -2,7 +2,7 @@ from os import setuid,setgid,path
 from json import load
 from time import time
 from select import select
-import socket
+import socket, traceback
 identf = open("name")
 ident = identf.read().strip()
 identf.close()
@@ -54,15 +54,16 @@ if __name__=='__main__':
     servers[-1].setblocking(0)
   try:
    while True:
-     in_ready,_,_=select(servers,[],[])
+     in_ready, _, _ = select(servers,[],[])
      for ready in in_ready:
        if ready in servers:
-         client,addr=ready.accept()
+         client, addr=ready.accept()
+         client_simplified = ":".join([addr[0], str(addr[1])])
          in_ready.append(client)
        else:
          try:
-           handle_ident(ready, ":".join(list(addr)))
-         except:
-           pass
+           handle_ident(ready, client_simplified)
+         except Exception as e:
+           print(client_simplified + " " + str(e))
   except:
-   print("Unexpected error (port unbound?)")
+    print("Unexpected error (port unbound?)")
