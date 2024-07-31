@@ -16,7 +16,7 @@ def handle_ident(fd, host):
                 data=fd.recv(1024).strip()
                 print(str(data))
         except:
-                fd.send('0,0:ERROR:UNKNOWN-ERROR\n') # TODO: catch exceptions which are actual errors, as opposed to no-data reports
+                fd.send("0,0:ERROR:UNKNOWN-ERROR\n") # TODO: catch exceptions which are actual errors, as opposed to no-data reports
                 return
         ports=data.decode("ASCII").split(',',2)
         rm_ports = []
@@ -24,7 +24,7 @@ def handle_ident(fd, host):
                 ports[i] = ports[i].strip()
                 if isinstance(valid_port(host, ports[i]), int):
                         rm_ports.append(ports[i])
-        data = ','.join(rm_ports)+':USERID:'+os+':' + ident  + '\n'
+        data = ",".join(rm_ports) + ":USERID:" + os + ":" + ident  + "\n"
         print(data.strip())
         fd.send(data.encode("ASCII"))
         fd.close()
